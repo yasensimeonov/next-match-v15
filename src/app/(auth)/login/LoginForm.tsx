@@ -7,15 +7,25 @@ import {Button} from "@heroui/button";
 import {useForm} from "react-hook-form";
 import {loginSchema, LoginSchema} from "@/lib/schemas/loginSchema";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {signInUser} from "@/app/actions/authActions";
+import {useRouter} from "next/navigation";
 
 export default function LoginForm() {
-    const {register, handleSubmit, formState: {errors, isValid}} = useForm<LoginSchema>({
+    const router = useRouter();
+
+    const {register, handleSubmit, formState: {errors, isValid, isSubmitting}} = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         mode: 'onTouched',
     });
 
-    const onSubmit = (data: LoginSchema)=> {
-        console.log(data);
+    const onSubmit = async (data: LoginSchema)=> {
+        const result = await signInUser(data);
+
+        if (result.status === 'success') {
+            router.push('/members');
+        } else {
+            console.log(result.error);
+        }
     }
 
     return (
@@ -51,7 +61,7 @@ export default function LoginForm() {
                             isInvalid={!!errors.password}
                             errorMessage={errors.password?.message as string}
                         />
-                        <Button isDisabled={!isValid} fullWidth color='secondary' type='submit'>
+                        <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='secondary' type='submit'>
                             Login
                         </Button>
                     </div>
