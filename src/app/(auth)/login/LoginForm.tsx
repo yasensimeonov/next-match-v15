@@ -19,8 +19,6 @@ export default function LoginForm() {
     }
 
     return (
-        //<div>Login Form</div>
-
         <Card className='w-2/5 mx-auto'>
             <CardHeader className='flex flex-col items-center justify-center'>
                 <div className='flex flex-col gap-2 items-center text-secondary'>
