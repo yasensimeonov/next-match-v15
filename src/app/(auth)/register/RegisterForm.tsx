@@ -12,7 +12,7 @@ import {ZodIssue} from "zod";
 
 export default function RegisterForm() {
     const {register, handleSubmit, setError, formState: {errors, isValid, isSubmitting}} = useForm<RegisterSchema>({
-        // resolver: zodResolver(registerSchema),
+        resolver: zodResolver(registerSchema),
         mode: 'onTouched',
     });
 

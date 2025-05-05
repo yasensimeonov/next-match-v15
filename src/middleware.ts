@@ -1,21 +1,13 @@
 import { auth } from '@/auth';
-import {authRoutes, publicRoutes} from "@/routes";
+import {authRoutes, privateRoutes} from "@/routes";
 import {NextResponse} from "next/server";
 
 export default auth((req) => {
     const {nextUrl} = req;
     const isLoggedIn = !!req.auth;
 
-    const isPublic = publicRoutes.includes(nextUrl.pathname);
+    const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-    console.log('isLoggedIn: ', isLoggedIn);
-    console.log('isPublicRoute: ', isPublic);
-    console.log('isAuthRoute: ', isAuthRoute);
-
-    if (isPublic) {
-        return NextResponse.next();
-    }
 
     if (isAuthRoute) {
         if (isLoggedIn) {
@@ -24,12 +16,8 @@ export default auth((req) => {
         return NextResponse.next();
     }
 
-    if (!isPublic && !isLoggedIn) {
-        const redirectUrl = new URL('/login', nextUrl);
-
-        console.log('Trying to redirect to: ', redirectUrl.toString());
-
-        NextResponse.redirect(new URL(redirectUrl));
+    if (isPrivateRoute && !isLoggedIn) {
+        return NextResponse.redirect(new URL('/login', nextUrl));
     }
 
     return NextResponse.next();
