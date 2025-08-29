@@ -1,3 +1,5 @@
+'use client';
+
 import {Member} from "@prisma/client";
 import {Card, CardBody, CardFooter} from "@heroui/card";
 import {Image} from "@heroui/image";
