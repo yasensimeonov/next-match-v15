@@ -7,15 +7,22 @@ import {MemberEditSchema, memberEditSchema} from "@/lib/schemas/memberEditSchema
 import {Input, Textarea} from "@heroui/input";
 import {useEffect} from "react";
 import {Button} from "@heroui/button";
+import {updateMemberProfile} from "@/app/actions/userActions";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+import {handleFormServerErrors} from "@/lib/util";
 
 type Props = {
     member: Member;
 }
 
 export default function EditForm({member}: Props) {
+    const router = useRouter();
+
     const {register,
         handleSubmit,
         reset,
+        setError,
         formState: {isValid, isDirty, isSubmitting, errors}} = useForm<MemberEditSchema>({
             resolver: zodResolver(memberEditSchema),
             mode: "onTouched"
@@ -32,8 +39,16 @@ export default function EditForm({member}: Props) {
         }
     }, [member, reset]);
 
-    const onSubmit = (data: MemberEditSchema) => {
-        console.log(data);
+    const onSubmit = async (data: MemberEditSchema) => {
+        const result = await updateMemberProfile(data);
+
+        if (result.status === 'success') {
+            toast.success('Profile updated.');
+            router.refresh();
+            reset({...data});
+        } else {
+            handleFormServerErrors(result, setError);
+        }
     }
 
     return (
@@ -73,6 +88,9 @@ export default function EditForm({member}: Props) {
                     errorMessage={errors.country?.message}
                 />
             </div>
+            {errors.root?.serverError && (
+                <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
+            )}
             <Button
                 type="submit"
                 className="flex self-end"
