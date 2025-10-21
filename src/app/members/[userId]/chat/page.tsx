@@ -1,16 +1,12 @@
-import {CardBody, CardHeader} from "@heroui/card";
-import {Divider} from "@heroui/divider";
+import CardInnerWrapper from "@/components/CardInnerWrapper";
+import ChatForm from "@/app/members/[userId]/chat/ChatForm";
 
 export default function ChatPage() {
     return (
-        <>
-            <CardHeader className="text-2xl font-semibold text-secondary">
-                ChatPage
-            </CardHeader>
-            <Divider />
-            <CardBody>
-                ChatPage goes here
-            </CardBody>
-        </>
+        <CardInnerWrapper
+            header={"Chat"}
+            body={<div>Chat Page</div>}
+            footer={<ChatForm />}
+        />
     )
 }

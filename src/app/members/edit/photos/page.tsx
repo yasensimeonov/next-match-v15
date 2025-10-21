@@ -1,9 +1,9 @@
-import {CardBody, CardHeader} from "@heroui/card";
-import {Divider} from "@heroui/divider";
 import {getAuthUserId} from "@/app/actions/authActions";
 import {getMemberByUserId, getMemberPhotosByUserId} from "@/app/actions/memberActions";
 import MemberPhotoUpload from "@/app/members/edit/photos/MemberPhotoUpload";
 import MemberPhotos from "@/components/MemberPhotos";
+import {CardBody, CardHeader} from "@heroui/card";
+import {Divider} from "@heroui/divider";
 
 export default async function PhotosPage() {
     const userId = await getAuthUserId();
@@ -12,9 +12,9 @@ export default async function PhotosPage() {
 
     return (
         <>
-            <CardHeader className="flex flex-row justify-between items-center">
-                <div className="text-2xl font-semibold text-secondary">
-                    Edit Profile
+            <CardHeader className='flex flex-row justify-between items-center'>
+                <div className='text-2xl font-semibold text-secondary'>
+                    Edit Photos
                 </div>
                 <MemberPhotoUpload />
             </CardHeader>
