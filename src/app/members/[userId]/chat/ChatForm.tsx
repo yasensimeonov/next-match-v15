@@ -9,15 +9,20 @@ import {HiPaperAirplane} from "react-icons/hi2";
 import {useParams, useRouter} from "next/navigation";
 import {createMessage} from "@/app/actions/messageActions";
 import {handleFormServerErrors} from "@/lib/util";
+import {useEffect} from "react";
 
 export default function ChatForm() {
     const router = useRouter();
     const params = useParams<{userId: string}>();
 
-    const {register, handleSubmit, reset, setError,
+    const {register, handleSubmit, reset, setError, setFocus,
             formState: {isSubmitting, isValid, errors}} = useForm<MessageSchema>({
         resolver: zodResolver(messageSchema)
     })
+
+    useEffect(() => {
+        setFocus('text');
+    }, [setFocus])
 
     const onSubmit = async (data: MessageSchema) => {
         const result = await createMessage(params.userId, data);
@@ -27,6 +32,7 @@ export default function ChatForm() {
         } else {
             reset();
             router.refresh();
+            setTimeout(() => setFocus('text'), 50);
         }
     }
 
