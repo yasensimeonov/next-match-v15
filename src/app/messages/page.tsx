@@ -1,6 +1,5 @@
 import MessageSidebar from "@/app/messages/MessageSidebar";
 import {getMessagesByContainer} from "@/app/actions/messageActions";
-import {SearchParams} from "next/dist/server/request/search-params";
 import MessageTable from "@/app/messages/MessageTable";
 
 export default async function MessagesPage({searchParams}: {searchParams: Promise<{container: string}>}) {
