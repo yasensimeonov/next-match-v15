@@ -19,6 +19,10 @@ if (!globalThis.pusherServerInstance) {
 
 if (!globalThis.pusherClientInstance) {
     globalThis.pusherClientInstance = new PusherClient(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
+        channelAuthorization: {
+            endpoint: '/api/pusher-auth',
+            transport: 'ajax'
+        },
         cluster: 'eu'
     })
 }
