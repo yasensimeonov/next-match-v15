@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {devtools} from "zustand/middleware/devtools";
+import {devtools} from "zustand/middleware";
 
 type PresenceState = {
     members: string[];

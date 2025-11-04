@@ -6,6 +6,7 @@ import {Image} from "@heroui/image";
 import Link from "next/link";
 import {calculateAge, transformImageUrl} from "@/lib/util";
 import LikeButton from "@/components/LikeButton";
+import PresenceDot from "@/components/PresenceDot";
 
 type Props = {
     member: Member,
@@ -38,6 +39,9 @@ export default function MemberCard({member, likedIds}: Props) {
             <div onClick={preventLinkAction}>
                 <div className='absolute top-3 right-3 z-50'>
                     <LikeButton targetId={member.userId} hasLiked={hasLiked} />
+                </div>
+                <div className='absolute top-2 left-3 z-50'>
+                    <PresenceDot member={member} />
                 </div>
             </div>
 
