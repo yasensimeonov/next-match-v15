@@ -7,6 +7,7 @@ import {User} from "@prisma/client";
 import {LoginSchema} from "@/lib/schemas/loginSchema";
 import {auth, signIn, signOut} from "@/auth";
 import {AuthError} from "next-auth";
+import {ActionResult} from "@/types";
 
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
     try {
