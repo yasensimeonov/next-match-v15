@@ -7,11 +7,11 @@ import MessageTableCell from "@/app/messages/MessageTableCell";
 import {useMessages} from "@/hooks/useMessages";
 
 type Props = {
-    messages: MessageDto[];
+    initialMessages: MessageDto[];
 }
 
-export default function MessageTable({messages}: Props) {
-    const {columns, isOutbox, isDeleting, deleteMessage, selectRow} = useMessages(messages);
+export default function MessageTable({initialMessages}: Props) {
+    const {columns, isOutbox, isDeleting, deleteMessage, selectRow, messages} = useMessages(initialMessages);
 
     return (
         <Card className='flex flex-col gap-3 h-[80vh] overflow-auto'>

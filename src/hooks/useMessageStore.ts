@@ -15,3 +15,5 @@ const useMessageStore = create<MessageState>()(devtools((set) => ({
     remove: (id) => set(state => ({messages: state.messages.filter(message => message.id !== id)})),
     set: (messages) => set({messages: messages}),
 }), {name: "messageStore"}));
+
+export default useMessageStore;
