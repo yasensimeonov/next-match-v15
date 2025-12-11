@@ -6,17 +6,26 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {pusherClient} from "@/lib/pusher";
 import {formatShortDateTime} from "@/lib/util";
 import {Channel} from "pusher-js";
+import useMessageStore from "@/hooks/useMessageStore";
 
 type Props = {
-    initialMessages: MessageDto[];
+    initialMessages: {messages: MessageDto[], readCount: number};
     currentUserId: string;
     chatId: string;
 }
 
 export default function MessageList({initialMessages, currentUserId, chatId}: Props) {
-
+    const [messages, setMessages] = useState(initialMessages.messages);
     const channelRef = useRef<Channel | null>(null);
-    const [messages, setMessages] = useState(initialMessages);
+    const updateUnreadCount = useMessageStore(state => state.updateUnreadCount);
+    const setReadCount = useRef(false);
+
+    useEffect(() => {
+        if (!setReadCount.current) {
+            updateUnreadCount(-initialMessages.readCount);
+            setReadCount.current = true;
+        }
+    }, [initialMessages.readCount, updateUnreadCount]);
 
     const handleNewMessage = useCallback((message: MessageDto) => {
         setMessages(prevMessages => {
