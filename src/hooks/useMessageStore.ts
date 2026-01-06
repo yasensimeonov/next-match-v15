@@ -18,6 +18,6 @@ const useMessageStore = create<MessageState>()(devtools((set) => ({
     remove: (id) => set(state => ({messages: state.messages.filter(message => message.id !== id)})),
     set: (messages) => set({messages: messages}),
     updateUnreadCount: (amount: number)=> set(state => ({unreadCount: state.unreadCount + amount}))
-}), {name: "messageStore"}));
+}), {name: "MessageStore"}));
 
 export default useMessageStore;
