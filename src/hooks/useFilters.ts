@@ -1,13 +1,14 @@
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {FaFemale, FaMale} from "react-icons/fa";
 import useFilterStore from "@/hooks/useFilterStore";
-import {useEffect} from "react";
+import {useEffect, useTransition} from "react";
 import {Selection} from '@heroui/react';
 
 export const useFilters = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const [isPending, startTransition] = useTransition();
 
     // const {filters} = useFilterStore(useShallow(
     //     state => ({
@@ -19,14 +20,15 @@ export const useFilters = () => {
     const {gender, ageRange, orderBy} = filters;
 
     useEffect(() => {
-        const searchParams = new URLSearchParams();
+        startTransition(() => {
+            const searchParams = new URLSearchParams();
 
-        if (gender) searchParams.set('gender', gender.join(','));
-        if (ageRange) searchParams.set('ageRange', ageRange.toString());
-        if (orderBy) searchParams.set('orderBy', orderBy);
+            if (gender) searchParams.set('gender', gender.join(','));
+            if (ageRange) searchParams.set('ageRange', ageRange.toString());
+            if (orderBy) searchParams.set('orderBy', orderBy);
 
-        router.replace(`${pathname}?${searchParams}`);
-
+            router.replace(`${pathname}?${searchParams}`);
+        })
     }, [gender, ageRange, orderBy, searchParams, pathname, router]);
 
     const orderByList = [
@@ -80,7 +82,8 @@ export const useFilters = () => {
         selectAge: handleAgeSelect,
         selectGender: handleGenderSelect,
         selectOrder: handleOrderSelect,
-        filters
+        filters,
+        isPending
     }
 
 }

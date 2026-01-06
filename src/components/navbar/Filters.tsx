@@ -1,23 +1,27 @@
 'use client'
 
-import {usePathname} from "next/navigation";
 import {Button} from "@heroui/button";
 import {Slider} from "@heroui/slider";
 import {Select, SelectItem} from "@heroui/select";
 import {useFilters} from "@/hooks/useFilters";
+import {Spinner} from "@heroui/spinner";
 
 export default function Filters() {
-    const pathname = usePathname();
-    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder} = useFilters();
+    // const pathname = usePathname();
+    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder, isPending} = useFilters();
 
-    if (pathname !== '/members') {
-        return null;
-    }
+    // if (pathname !== '/members') {
+    //     return null;
+    // }
 
     return (
         <div className="shadow-md py-2">
             <div className="flex flex-row justify-around items-center">
-                <div className="text-secondary font-semibold text-xl">Results: 10</div>
+                <div className='flex gap-2 items-center'>
+                    <div className="text-secondary font-semibold text-xl">Results: 10</div>
+                    {isPending && <Spinner size='sm' color='secondary' />}
+                </div>
+
                 <div className='flex gap-2 items-center'>
                     <div>Gender:</div>
                     {genderList.map(({icon: Icon, value}) => (
