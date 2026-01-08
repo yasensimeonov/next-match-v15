@@ -3,6 +3,8 @@ import {FaFemale, FaMale} from "react-icons/fa";
 import useFilterStore from "@/hooks/useFilterStore";
 import {useEffect, useTransition} from "react";
 import {Selection} from '@heroui/react';
+import usePaginationStore from "@/hooks/usePaginationStore";
+import {useShallow} from "zustand/react/shallow";
 
 export const useFilters = () => {
     const pathname = usePathname();
@@ -17,7 +19,21 @@ export const useFilters = () => {
 
     const {filters, setFilters} = useFilterStore();
 
+    const {pageNumber, pageSize, setPage} = usePaginationStore(
+        useShallow(
+            state => ({
+                pageNumber: state.pagination.pageNumber,
+                pageSize: state.pagination.pageSize,
+                setPage: state.setPage
+            })));
+
     const {gender, ageRange, orderBy} = filters;
+
+    useEffect(() => {
+        if (gender || ageRange || orderBy) {
+            setPage(1);
+        }
+    }, [ageRange, gender, orderBy, setPage]);
 
     useEffect(() => {
         startTransition(() => {
@@ -26,10 +42,12 @@ export const useFilters = () => {
             if (gender) searchParams.set('gender', gender.join(','));
             if (ageRange) searchParams.set('ageRange', ageRange.toString());
             if (orderBy) searchParams.set('orderBy', orderBy);
+            if (pageSize) searchParams.set('pageSize', pageSize.toString());
+            if (pageNumber) searchParams.set('pageNumber', pageNumber.toString());
 
             router.replace(`${pathname}?${searchParams}`);
         })
-    }, [gender, ageRange, orderBy, searchParams, pathname, router]);
+    }, [gender, ageRange, orderBy, searchParams, pathname, router, pageSize, pageNumber]);
 
     const orderByList = [
         {label: 'Last active', value: 'updated'},

@@ -47,7 +47,15 @@ type PagingResult = {
     totalCount: number;
 } & PagingParams
 
-type PaginatedResponse = {
+type PaginatedResponse<T> = {
     items: T[];
     totalCount: number;
+}
+
+type GetMemberParams = {
+    ageRange?: string;
+    gender?: string;
+    pageNumber?: string;
+    pageSize?: string;
+    orderBy?: string;
 }
