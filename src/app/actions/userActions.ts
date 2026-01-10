@@ -5,6 +5,7 @@ import {Member, Photo} from "@prisma/client";
 import {getAuthUserId} from "@/app/actions/authActions";
 import {prisma} from "@/lib/prisma";
 import {cloudinary} from "@/lib/cloudinary";
+import {ActionResult} from "@/types";
 
 export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: boolean): Promise<ActionResult<Member>> {
     try {
