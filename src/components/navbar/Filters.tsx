@@ -8,7 +8,7 @@ import {Spinner} from "@heroui/spinner";
 
 export default function Filters() {
     // const pathname = usePathname();
-    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder, isPending} = useFilters();
+    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder, isPending, totalCount} = useFilters();
 
     // if (pathname !== '/members') {
     //     return null;
@@ -18,8 +18,10 @@ export default function Filters() {
         <div className="shadow-md py-2">
             <div className="flex flex-row justify-around items-center">
                 <div className='flex gap-2 items-center'>
-                    <div className="text-secondary font-semibold text-xl">Results: 10</div>
-                    {isPending && <Spinner size='sm' color='secondary' />}
+                    <div className="text-secondary font-semibold text-xl">
+                        Results: {isPending ? <Spinner size='sm' color='secondary' /> : totalCount}
+                    </div>
+                    {/*{isPending && <Spinner size='sm' color='secondary' />}*/}
                 </div>
 
                 <div className='flex gap-2 items-center'>

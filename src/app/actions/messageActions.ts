@@ -99,7 +99,7 @@ export async function getMessageThread(recipientId: string) {
     }
 }
 
-export async function getMessagesByContainer(container?: string | null, cursor?: string, limit = 2) {
+export async function getMessagesByContainer(container?: string | null, cursor?: string, limit = 10) {
     try {
         const userId = await getAuthUserId();
 
