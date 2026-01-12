@@ -5,10 +5,11 @@ import {Slider} from "@heroui/slider";
 import {Select, SelectItem} from "@heroui/select";
 import {useFilters} from "@/hooks/useFilters";
 import {Spinner} from "@heroui/spinner";
+import {Switch} from "@heroui/switch";
 
 export default function Filters() {
     // const pathname = usePathname();
-    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder, isPending, totalCount} = useFilters();
+    const {genderList, orderByList, filters, selectAge, selectGender, selectOrder, isPending, totalCount, selectWithPhoto} = useFilters();
 
     // if (pathname !== '/members') {
     //     return null;
@@ -50,6 +51,15 @@ export default function Filters() {
                         //defaultValue={[18, 100]}
                         defaultValue={filters.ageRange}
                         onChangeEnd={(value) => selectAge(value as number[])}
+                    />
+                </div>
+                <div className="flex flex-col items-center">
+                    <p className='text-sm'>With photo</p>
+                    <Switch
+                        color='secondary'
+                        isSelected={filters.withPhoto}
+                        size='sm'
+                        onChange={selectWithPhoto}
                     />
                 </div>
                 <div className="w-1/4">
