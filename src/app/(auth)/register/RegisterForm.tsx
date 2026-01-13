@@ -1,29 +1,35 @@
 'use client';
 
-import {useForm} from "react-hook-form";
+import {FormProvider, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Card, CardBody, CardHeader} from "@heroui/card";
 import {GiPadlock} from "react-icons/gi";
-import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {registerSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
 import {registerUser} from "@/app/actions/authActions";
 import {handleFormServerErrors} from "@/lib/util";
+import UserDetailsForm from "@/app/(auth)/register/UserDetailsForm";
 
 export default function RegisterForm() {
-    const {register, handleSubmit, setError, formState: {errors, isValid, isSubmitting}} = useForm<RegisterSchema>({
+    // const {register, handleSubmit, setError, formState: {errors, isValid, isSubmitting}} = useForm<RegisterSchema>({
+    const methods = useForm<RegisterSchema>({
         resolver: zodResolver(registerSchema),
         mode: 'onTouched',
     });
 
-    const onSubmit = async (data: RegisterSchema)=> {
-        const result = await registerUser(data);
+    const {handleSubmit, setError, getValues, formState: {errors, isValid, isSubmitting}} = methods;
 
-        if (result.status === 'success') {
-            console.log('User registered successfully.');
-        } else {
-            handleFormServerErrors(result, setError);
-        }
+    //const onSubmit = async (data: RegisterSchema)=> {
+    const onSubmit = async ()=> {
+        console.log(getValues());
+
+        // const result = await registerUser(data);
+        //
+        // if (result.status === 'success') {
+        //     console.log('User registered successfully.');
+        // } else {
+        //     handleFormServerErrors(result, setError);
+        // }
     }
 
     return (
@@ -40,47 +46,27 @@ export default function RegisterForm() {
                 </div>
             </CardHeader>
             <CardBody>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='space-y-4'>
-                        <Input
-                            defaultValue=''
-                            label='Name'
-                            variant='bordered'
-                            {...register('name')}
-                            isInvalid={!!errors.name}
-                            errorMessage={errors.name?.message}
-                        />
-                        <Input
-                            defaultValue=''
-                            label='Email'
-                            variant='bordered'
-                            {...register('email')}
-                            isInvalid={!!errors.email}
-                            errorMessage={errors.email?.message}
-                        />
-                        <Input
-                            defaultValue=''
-                            label='Password'
-                            variant='bordered'
-                            type='password'
-                            {...register('password')}
-                            isInvalid={!!errors.password}
-                            errorMessage={errors.password?.message}
-                        />
-                        {errors.root?.serverError && (
-                            <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
-                        )}
-                        <Button
-                            isLoading={isSubmitting}
-                            isDisabled={!isValid}
-                            fullWidth
-                            color='secondary'
-                            type='submit'
-                        >
-                            Register
-                        </Button>
-                    </div>
-                </form>
+                <FormProvider {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className='space-y-4'>
+
+                            <UserDetailsForm />
+
+                            {errors.root?.serverError && (
+                                <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
+                            )}
+                            <Button
+                                isLoading={isSubmitting}
+                                isDisabled={!isValid}
+                                fullWidth
+                                color='secondary'
+                                type='submit'
+                            >
+                                Register
+                            </Button>
+                        </div>
+                    </form>
+                </FormProvider>
             </CardBody>
         </Card>
     );
