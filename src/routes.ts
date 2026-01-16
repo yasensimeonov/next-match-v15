@@ -9,5 +9,6 @@ export const privateRoutes = [
 
 export const authRoutes = [
     '/register',
+    '/register/success',
     '/login'
 ];

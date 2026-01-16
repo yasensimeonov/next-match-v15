@@ -11,10 +11,12 @@ import {handleFormServerErrors} from "@/lib/util";
 import UserDetailsForm from "@/app/(auth)/register/UserDetailsForm";
 import {useState} from "react";
 import ProfileForm from "@/app/(auth)/register/ProfileForm";
+import {useRouter} from "next/navigation";
 
 const stepSchemas = [registerSchema, profileSchema];
 
 export default function RegisterForm() {
+    const router = useRouter();
     const [activeStep, setActiveStep] = useState(0);
     const currentValidationSchema = stepSchemas[activeStep];
 
@@ -29,15 +31,14 @@ export default function RegisterForm() {
 
     //const onSubmit = async (data: RegisterSchema)=> {
     const onSubmit = async ()=> {
-        console.log(getValues());
+        const result = await registerUser(getValues());
 
-        // const result = await registerUser(data);
-        //
-        // if (result.status === 'success') {
-        //     console.log('User registered successfully.');
-        // } else {
-        //     handleFormServerErrors(result, setError);
-        // }
+        if (result.status === 'success') {
+            // console.log('User registered successfully.');
+            router.push('/register/success');
+        } else {
+            handleFormServerErrors(result, setError);
+        }
     }
 
     const getStepContent = (step: number)=> {
