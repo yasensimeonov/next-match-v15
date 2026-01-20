@@ -9,6 +9,7 @@ import {auth, signIn, signOut} from "@/auth";
 import {AuthError} from "next-auth";
 import {ActionResult} from "@/types";
 import {generateToken} from "@/lib/tokens";
+import {sendVerificationEmail} from "@/lib/mail";
 
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>> {
     try {
@@ -19,9 +20,10 @@ export async function signInUser(data: LoginSchema): Promise<ActionResult<string
         }
 
         if (!existingUser.emailVerified) {
-            const token = generateToken(existingUser.email, TokenType.VERIFICATION);
+            const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
 
             // Send user email
+            await sendVerificationEmail(token.email, token.token);
 
             return {status: 'error', error: 'Please verify your email address before logging in'}
         }
@@ -95,7 +97,8 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
         const verificationToken = await generateToken(email, TokenType.VERIFICATION);
 
-        // Send them an email with the Verification Token
+        // Email them with the Verification Token
+        await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
         return {status: 'success', data: user};
     } catch (error) {
