@@ -13,6 +13,17 @@ export async function getTokenByEmail(email: string) {
     }
 }
 
+export async function getTokenByToken(token: string) {
+    try {
+        return prisma.token.findFirst({
+            where: {token: token}
+        });
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export async function generateToken(email: string, type: TokenType) {
     const token = randomBytes(48).toString('hex');
     const expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
