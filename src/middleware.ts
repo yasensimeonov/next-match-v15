@@ -8,6 +8,7 @@ export default auth((req) => {
 
     const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+    const isProfileComplete = req.auth?.user.profileComplete;
 
     if (isAuthRoute) {
         if (isLoggedIn) {
@@ -18,6 +19,10 @@ export default auth((req) => {
 
     if (isPrivateRoute && !isLoggedIn) {
         return NextResponse.redirect(new URL('/login', nextUrl));
+    }
+
+    if (isLoggedIn && !isProfileComplete && nextUrl.pathname !== '/complete-profile') {
+        return NextResponse.redirect(new URL('/complete-profile', nextUrl));
     }
 
     return NextResponse.next();
