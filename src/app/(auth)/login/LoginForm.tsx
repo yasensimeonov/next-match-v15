@@ -11,6 +11,7 @@ import {signInUser} from "@/app/actions/authActions";
 import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import Link from "next/link";
+import SocialLogin from "@/app/(auth)/login/SocialLogin";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -67,6 +68,7 @@ export default function LoginForm() {
                         <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='secondary' type='submit'>
                             Login
                         </Button>
+                        <SocialLogin />
                         <div className='flex justify-center hover:underline text-sm'>
                             <Link href='/forgot-password'>Forgot password?</Link>
                         </div>

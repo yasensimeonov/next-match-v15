@@ -9,7 +9,8 @@ import useMessageStore from "@/hooks/useMessageStore";
 import {useShallow} from "zustand/react/shallow";
 import {getUnreadMessageCount} from "@/app/actions/messageActions";
 
-export default function Providers({children, userId}: {children: ReactNode, userId: string | null}) {
+export default function Providers({children, userId, profileComplete}:
+    {children: ReactNode, userId: string | null, profileComplete: boolean}) {
     //const updateUnreadCount = useMessageStore(state => state.updateUnreadCount);
     const {updateUnreadCount} = useMessageStore(useShallow(
         state => ({
@@ -28,8 +29,8 @@ export default function Providers({children, userId}: {children: ReactNode, user
         }
     }, [setUnreadCount, userId]);
 
-    usePresenceChannel(userId);
-    useNotificationChannel(userId);
+    usePresenceChannel(userId, profileComplete);
+    useNotificationChannel(userId, profileComplete);
 
     return (
         <HeroUIProvider>
