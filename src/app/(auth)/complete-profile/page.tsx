@@ -1,7 +1,7 @@
+import CompleteProfileForm from "@/app/(auth)/complete-profile/CompleteProfileForm";
+
 export default function CompleteProfilePage() {
     return (
-        <div>
-            Complete profile page
-        </div>
+        <CompleteProfileForm />
     )
 }
