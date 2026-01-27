@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "TokenType" AS ENUM ('VERIFICATION', 'PASSWORD_RESET');
+
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'MEMBER');
+
 -- CreateTable
 CREATE TABLE "Account" (
     "userId" TEXT NOT NULL,
@@ -24,6 +30,8 @@ CREATE TABLE "User" (
     "emailVerified" TIMESTAMP(3),
     "passwordHash" TEXT,
     "image" TEXT,
+    "profileComplete" BOOLEAN NOT NULL DEFAULT false,
+    "role" "Role" NOT NULL DEFAULT 'MEMBER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -77,6 +85,17 @@ CREATE TABLE "Message" (
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Token" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expires" TIMESTAMP(3) NOT NULL,
+    "type" "TokenType" NOT NULL,
+
+    CONSTRAINT "Token_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -85,6 +104,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Member_userId_key" ON "Member"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Token_email_token_key" ON "Token"("email", "token");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
