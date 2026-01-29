@@ -7,7 +7,6 @@ import {loginSchema} from "@/lib/schemas/loginSchema";
 import {getUserByEmail} from "@/app/actions/authActions";
 import {compare} from "bcryptjs";
 
-
 export default {
     providers: [
         Google({

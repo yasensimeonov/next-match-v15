@@ -7,7 +7,9 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async jwt({ user, token }) {
             if (user) {
-                token.profileComplete = user.profileComplete
+                console.log({user});
+                token.profileComplete = user.profileComplete;
+                token.role = user.role;
             }
 
             return token;
@@ -16,6 +18,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
             if (token.sub && session.user) {
                 session.user.id = token.sub;
                 session.user.profileComplete = token.profileComplete as boolean;
+                session.user.role = token.role;
             }
 
             return session;

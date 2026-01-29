@@ -1,10 +1,14 @@
-export const privateRoutes = [
-    '/lists',
-    '/members',
-    '/messages',
-    '/lists/:path*',
-    '/members/:path*',
-    '/messages/:path*',
+// export const privateRoutes = [
+//     '/lists',
+//     '/members',
+//     '/messages',
+//     '/lists/:path*',
+//     '/members/:path*',
+//     '/messages/:path*',
+// ];
+
+export const publicRoutes = [
+    '/'
 ];
 
 export const authRoutes = [

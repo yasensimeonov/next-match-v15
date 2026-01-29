@@ -8,6 +8,7 @@ import {useNotificationChannel} from "@/hooks/useNotificationChannel";
 import useMessageStore from "@/hooks/useMessageStore";
 import {useShallow} from "zustand/react/shallow";
 import {getUnreadMessageCount} from "@/app/actions/messageActions";
+import {SessionProvider} from "next-auth/react";
 
 export default function Providers({children, userId, profileComplete}:
     {children: ReactNode, userId: string | null, profileComplete: boolean}) {
@@ -33,9 +34,11 @@ export default function Providers({children, userId, profileComplete}:
     useNotificationChannel(userId, profileComplete);
 
     return (
-        <HeroUIProvider>
-            <ToastContainer position="bottom-right" hideProgressBar={true} className="z-50" />
-            {children}
-        </HeroUIProvider>
+        <SessionProvider>
+            <HeroUIProvider>
+                <ToastContainer position="bottom-right" hideProgressBar={true} className="z-50" />
+                {children}
+            </HeroUIProvider>
+        </SessionProvider>
     )
 }
