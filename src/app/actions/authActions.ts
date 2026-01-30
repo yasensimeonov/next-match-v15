@@ -260,3 +260,13 @@ export async function completeSocialLoginProfile(data: ProfileSchema): Promise<A
         throw error;
     }
 }
+
+export async function getUserRole() {
+    const session = await auth();
+
+    const role = session?.user.role;
+
+    if (!role) throw new Error('Not in any role');
+
+    return role;
+}
