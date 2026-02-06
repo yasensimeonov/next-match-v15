@@ -7,6 +7,11 @@ import clsx from "clsx";
 import {useRole} from "@/hooks/useRole";
 import {Button} from "@heroui/button";
 import {ImCheckmark, ImCross} from "react-icons/im";
+import {useRouter} from "next/navigation";
+import {toast} from "react-toastify";
+import {approvePhoto, rejectPhoto} from "@/app/actions/adminActions";
+import {useDisclosure} from "@heroui/react";
+import AppModal from "@/components/AppModal";
 
 type Props = {
     photo: Photo | null;
@@ -14,9 +19,41 @@ type Props = {
 
 export default function MemberImage({photo}: Props) {
     const role = useRole();
+    const router = useRouter();
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
+    if (!photo) {
+        return null;
+    }
+
+    const approve = async (photoId: string) => {
+        try {
+            await approvePhoto(photoId);
+            router.refresh();
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Something went wrong');
+            }
+        }
+    }
+
+    const reject = async (photo: Photo) => {
+        try {
+            await rejectPhoto(photo);
+            router.refresh();
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Something went wrong');
+            }
+        }
+    }
 
     return (
-        <div>
+        <div className='cursor-pointer' onClick={onOpen}>
             {photo?.publicId ? (
                 <CldImage
                     alt='Image of member'
@@ -48,14 +85,43 @@ export default function MemberImage({photo}: Props) {
             )}
             {role === 'ADMIN' && (
                 <div className='flex flex-row gap-2 mt-2'>
-                    <Button color='success' variant='bordered' fullWidth>
+                    <Button onPress={() => approve(photo.id)} color='success' variant='bordered' fullWidth>
                         <ImCheckmark size={20} />
                     </Button>
-                    <Button color='danger' variant='bordered' fullWidth>
+                    <Button onPress={() => reject(photo)} color='danger' variant='bordered' fullWidth>
                         <ImCross size={20} />
                     </Button>
                 </div>
             )}
+            <AppModal
+                isOpen={isOpen}
+                onClose={onClose}
+                body={
+                    <>
+                        {photo?.publicId ? (
+                            <CldImage
+                                alt='Image of member'
+                                src={photo.publicId}
+                                width={750}
+                                height={750}
+                                // className='rounded-2xl'
+                                className={clsx('rounded-2xl', {
+                                    'opacity-40': !photo.isApproved && role !== 'ADMIN'
+                                })}
+                                priority
+                            />
+                        ) : (
+                            <Image
+                                width={750}
+                                // height={750}
+                                src={photo?.url || '/images/user.png'}
+                                alt='Image of user'
+                            />
+                        )}
+                    </>
+                }
+                imageModal={true}
+            />
         </div>
     )
 }
