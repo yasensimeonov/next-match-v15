@@ -5,7 +5,7 @@ import {Tab, Tabs} from "@heroui/tabs";
 import {Key, useTransition} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import MemberCard from "@/app/members/MemberCard";
-import LoadingComponent from "@/components/LoadingComponent";
+import {Spinner} from "@heroui/spinner";
 
 type Props = {
     members: Member[];
@@ -17,7 +17,6 @@ export default function ListsTab({members, likeIds}: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const [isPending, startTransition] = useTransition();
-
 
     const tabs = [
         {id: 'source', label: 'Members I have liked'},
@@ -34,7 +33,10 @@ export default function ListsTab({members, likeIds}: Props) {
     }
 
     return (
-        <div className="flex flex-col w-full mt-10 gap-5">
+        <div className="flex flex-col w-full mt-10 gap-5 relative">
+            {isPending && (
+                <Spinner color='secondary' className='absolute left-[490px]' />
+            )}
             <Tabs
                 aria-label='Like tabs'
                 items={tabs}
@@ -43,21 +45,21 @@ export default function ListsTab({members, likeIds}: Props) {
             >
                 {(item) => (
                     <Tab key={item.id} title={item.label}>
-                        {isPending ? (
-                            <LoadingComponent />
-                        ) : (
-                            <>
-                                {members.length > 0 ? (
-                                    <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8'>
-                                        {members.map(member => (
-                                            <MemberCard key={member.id} member={member} likedIds={likeIds} />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div>No members for this filter</div>
-                                )}
-                            </>
-                        )}
+                        {/*{isPending ? (*/}
+                        {/*    <LoadingComponent />*/}
+                        {/*) : (*/}
+                        <>
+                            {members.length > 0 && !isPending ? (
+                                <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8'>
+                                    {members.map(member => (
+                                        <MemberCard key={member.id} member={member} likedIds={likeIds} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div>No members for this filter</div>
+                            )}
+                        </>
+                        {/*)}*/}
                     </Tab>
                 )}
             </Tabs>

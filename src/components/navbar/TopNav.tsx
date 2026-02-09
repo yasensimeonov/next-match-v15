@@ -49,7 +49,7 @@ export default async function TopNav() {
                     {/*<NavLink href='/members' label='Matches' />*/}
                     {/*<NavLink href='/lists' label='Lists' />*/}
                     {/*<NavLink href='/messages' label='Messages' />*/}
-                    {links.map(item => (
+                    {session && links.map(item => (
                         <NavLink key={item.href} href={item.href} label={item.label} />
                     ))}
                 </NavbarContent>
