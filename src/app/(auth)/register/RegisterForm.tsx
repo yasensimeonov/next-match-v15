@@ -6,6 +6,7 @@ import {Card, CardBody, CardHeader} from "@heroui/card";
 import {GiPadlock} from "react-icons/gi";
 import {Button} from "@heroui/button";
 import {profileSchema, registerSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
+import {z} from "zod";
 import {registerUser} from "@/app/actions/authActions";
 import {handleFormServerErrors} from "@/lib/util";
 import UserDetailsForm from "@/app/(auth)/register/UserDetailsForm";
@@ -23,7 +24,7 @@ export default function RegisterForm() {
     // const {register, handleSubmit, setError, formState: {errors, isValid, isSubmitting}} = useForm<RegisterSchema>({
     const methods = useForm<RegisterSchema>({
         // resolver: zodResolver(registerSchema),
-        resolver: zodResolver(currentValidationSchema),
+        resolver: zodResolver(currentValidationSchema as unknown as z.ZodType<RegisterSchema>),
         mode: 'onTouched',
     });
 

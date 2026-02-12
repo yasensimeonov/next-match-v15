@@ -55,7 +55,7 @@ export async function toggleLikeMember(targetUserId: string, isLiked: boolean): 
 
 export async function fetchCurrentUserLikedIds() {
     try {
-        const userId = getAuthUserId();
+        const userId = await getAuthUserId();
 
         const likedIds = await prisma.like.findMany({
             where: {
