@@ -6,13 +6,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {HiPaperAirplane} from "react-icons/hi2";
-import {useParams, useRouter} from "next/navigation";
+import {useParams} from "next/navigation";
 import {createMessage} from "@/app/actions/messageActions";
 import {handleFormServerErrors} from "@/lib/util";
 import {useEffect} from "react";
 
 export default function ChatForm() {
-    const router = useRouter();
+    //const router = useRouter();
     const params = useParams<{userId: string}>();
 
     const {register, handleSubmit, reset, setError, setFocus,
@@ -31,7 +31,7 @@ export default function ChatForm() {
             handleFormServerErrors(result, setError);
         } else {
             reset();
-            router.refresh();
+            // router.refresh();
             setTimeout(() => setFocus('text'), 50);
         }
     }
